@@ -24,6 +24,20 @@
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
+        <!-- Captcha -->
+        <div class="mt-4">
+            <x-input-label for="captcha" :value="__('Captcha Verification')" />
+            <div class="captcha x-data flex items-center justify-center">
+                <span>{!! captcha_img() !!}</span>
+                <button type="button" class="mr-2 ml-1 bg-red-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-red-600 focus:outline-none" class="reload" id="reload">
+                    &#x21bb;
+                </button>
+                <x-text-input id="captcha" type="text" class="block mt-1 w-full" name="captcha" />
+            </div>
+            <x-input-error :messages="$errors->get('captcha')" class="mt-2" />
+            
+        </div>
+
         <!-- Remember Me -->
         <div class="block mt-4">
             <label for="remember_me" class="inline-flex items-center">
@@ -45,3 +59,15 @@
         </div>
     </form>
 </x-guest-layout>
+
+<script type="text/javascript">
+    $('#reload').click(function () {
+        $.ajax({
+            type: 'GET',
+            url: 'reload-captcha',
+            success: function (data) {
+                $(".captcha span").html(data.captcha);
+            }
+        });
+    });
+</script>
