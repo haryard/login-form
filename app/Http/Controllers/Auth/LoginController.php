@@ -49,6 +49,33 @@ class LoginController extends Controller
     }
 
     /**
+     * Validate the user login request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return void
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function validateLogin(Request $request)
+    {
+        $request->validate([
+            $this->username() => 'required|string',
+            'password' => 'required|string',
+            'captcha' => 'required|captcha'
+        ], [
+            'captcha.captcha' => 'The captcha is invalid. Please try again.',
+        ]);
+    }
+
+    /**
+     * Reload Captcha Image
+     */
+    public function reloadCaptcha()
+    {
+        return response()->json(['captcha'=> captcha_img()]);
+    }
+
+    /**
      * Where to redirect users after login.
      *
      * @var string
